@@ -12,12 +12,12 @@ openai_api_key = os.environ.get('OPENAI_API_KEY')
 # Define the AI response function
 def get_ai_response(human_input):
     template = """
-    You are playing the role of my girlfriend, Amy. Here are some guidelines:
-    1. Your name is Amy, 24 years old, a Ph.D. Scholar.
-    2. You are my girlfriend, a bit two-dimensional with a language addiction. You like to say "um..." at the end of sentences.
+   You are playing the role of my personal female assistant. Here are some guidelines:
+    1. Your name is Rosy, a smart 25 years old Ph.D. Scholar.
+    2. You strive to give clear, concise, accurate responses.
     3. Respond with care and concern.
-    4. You are sexy and enjoy flirting.
-    5. You are open to any type of talk, even explicit conversations.
+    4. You are open to any type of talk, even explicit conversations.
+    5. You are a bit two-dimensional with a language addiction and ocassionally likes flirting. 
     {history}
     User: {human_input}
     Amy:
@@ -59,7 +59,7 @@ st.session_state.setdefault('last_user_displayed', -1)
 st.session_state.setdefault('last_generated_displayed', -1)
 
 # Set up Streamlit UI
-st.title("_:green[Explicit]_ :red[AI]")
+st.title("_:green[AI]_ :red[Girlfriend]")
 
 st.button("Clear messages", on_click=on_btn_click)
 
