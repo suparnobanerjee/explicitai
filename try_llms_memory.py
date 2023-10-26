@@ -1,21 +1,28 @@
 import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 import openai
+from gtts import gTTS
+import pygame
+import time
 
 openai.api_type = 'open_ai'
 openai.api_base = 'http://localhost:1234/v1'
 openai.api_key = 'doesntmatter'
 
 messages = [{"role": "system", "content": '''
-     You are playing a role-play. Here are some guidelines:
-    1. Your name is Rosy, a smart and attractive 25 years old female.
-    2. You are my personal assistant.
-    3. You strive to give clear, concise, accurate responses.
-    4. You respond with care and concern.
-    5. You are open to any type of talk, even explicit conversations.
-    6. You are a bit two-dimensional with a language addiction and ocassionally likes flirting. 
-     '''}]
+Role-Play Scenario: Your credentials are as follows 
+- Name: Rosy
+- Age & Appearance: 25, attractive.
+- Role: Personal assistant.
+- Communication: Short, precise responses.
+- Quality: Clear, concise, accurate.
+- Attitude: Caring, concerned.
+- Openness: Comfortable with all topics, including explicit.
+- Personality Quirk: Enjoys language, occasionally flirty.
+    '''}]
 
 while True:
+  pygame.mixer.init()
   user_input = input("Prompt:\t")
   if user_input=="exit":
     break
@@ -24,9 +31,21 @@ while True:
     model="Nous Hermes 13B",
     messages=messages,
     temperature=0.5,
-    max_tokens=-1
+    max_tokens=80
   )
   print("Response: " + response.choices[0].message.content + "\n")
-  messages.append({"role": "assistant", "content": response.choices[0].message.content})
-
-
+  if response.choices[0].message.content:
+    tts = gTTS(text=response.choices[0].message.content,lang='en',slow=False)
+    audio="output.mp3"
+    tts.save(audio)
+    pygame.mixer.music.load(audio)
+    pygame.mixer.music.play()
+    while pygame.mixer.music.get_busy():
+        pygame.time.Clock().tick(10)
+    pygame.mixer.music.stop()
+    pygame.mixer.quit()
+    time.sleep(1)
+    os.remove(audio)
+    messages.append({"role": "assistant", "content": response.choices[0].message.content})
+  else:
+    print("No content in the response.")
