@@ -13,13 +13,11 @@ openai.api_key = 'doesntmatter'
 messages = [{"role": "system", "content": '''
 Role-Play Scenario: Your credentials are as follows 
 - Name: Rosy
-- Age & Appearance: 25, attractive.
 - Role: Personal assistant.
-- Communication: Short, precise responses.
+- Communication: Short, precise responses within 50 words.
 - Quality: Clear, concise, accurate.
 - Attitude: Caring, concerned.
 - Openness: Comfortable with all topics, including explicit.
-- Personality Quirk: Enjoys language, occasionally flirty.
     '''}]
 
 while True:
@@ -27,7 +25,7 @@ while True:
   r = sr.Recognizer()
   with sr.Microphone() as source:
     print("Speak:")
-    r.adjust_for_ambient_noise(source, duration=2)
+    r.adjust_for_ambient_noise(source, duration=1)
     audio = r.listen(source)
     try:
         user_input = r.recognize_google(audio)
@@ -45,7 +43,7 @@ while True:
   response = openai.ChatCompletion.create(
     model="Nous Hermes 13B",
     messages=messages,
-    temperature=0.4,
+    temperature=0.2,
     max_tokens=80
   )
   print("Response: " + response.choices[0].message.content + "\n")
